@@ -1,0 +1,22 @@
+:root{
+  --card-bg: #fff;
+  --shadow: #DDDDE3;
+  --main-bg: #F3D9DC
+}
+
+body {
+  background-color: var(--main-bg);
+}
+
+.main-column {
+  
+}
+
+.main-card {
+  margin-top: 20px;
+  padding: 20px;
+
+  background-color: var(--card-bg);
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px var(--shadow);
+}
