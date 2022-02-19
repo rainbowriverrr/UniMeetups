@@ -25,11 +25,21 @@ def login():
     password = request.form.get('password1')
 
     #checks for any users in the database that match the email entered
-    if db[email]:
+    if db['users'][email]:
       pass
-      
+      user = db['users'][email]
+      if check_password_hash(user['password'], password):
+        flash('Logged in successfully', category='yes')
+        login_user(user, remember=True)
+        return redirect(url_for('views.home'))
         
+      else:
+        flash('Login failed, wrong password', category='error')
 
+    #if user doesn't exist
+    else:
+      flash("USER DOES NOT EXIST!", category='error')
+      
     #access data sent via the form
     #data = request.form 
     #print(data)
@@ -48,7 +58,6 @@ def logout():
 @auth.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
     if request.method =='POST':
-
         email = request.form.get('email')
         full_name = request.form.get('name')
         pw1 = request.form.get('password1')
@@ -71,12 +80,15 @@ def sign_up():
         elif pw1 != pw2:
             flash('Passwords do not match', category='error')
         else:
-          user_data = {
-            "email":email,
-            "full_name":full_name,
-            "password":generate_password_hash(pw1,"sha256")
-          }
-          db[email] = user_data
+          form_data = request.form
+          print(form_data.keys())
+          # user_data = {
+          #   "email":email,
+          #   "full_name":full_name,
+          #   "password":generate_password_hash(pw1,"sha256")
+          # }
+          # db['users'][email] = user_data
+          return "<h1> signed up </h1>"
           
 
     else:
