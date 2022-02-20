@@ -20,10 +20,13 @@
   {% for match in matches %}
   <hr>
   <div class="title-card">
-    <img class="prof-pic" src"{{match['profile_photo']}}">
+    <img class="prof-pic" src="{{match['profile_photo']}}">
     <div>
       <h3>{{match['full_name']}}</h3>
       <p>{{match['description']}}</p>
+      <form action="" method="post">
+        <button class="meet-button" name="meetup" value="{{match['email']}}">Let's Meetup!</button>
+      </form>
     </div>
   </div>
   {% endfor %}

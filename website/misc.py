@@ -29,6 +29,7 @@ def get_matches(user : User):
       copied_data["profile_photo"] = url_for('static',filename= copied_data["profile_photo"].replace('website/static/',''))
       potential_matches.append(copied_data)
       
+      
 
   return potential_matches
   

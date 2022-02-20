@@ -3,6 +3,8 @@
   --off-bg: #f7f7f7;
   --shadow: #DDDDE3;
   --main-bg: #F3D9DC
+  --meetup-btn-clr: #4CAF50;
+  --meetup-btn-clr-drk: #2A662C;
 }
 
 body {
@@ -59,6 +61,7 @@ h4 {
 
 .title-card {
   padding-top: 20px;
+  padding-bottom: 20px;
   
   display: grid;
   grid-template-columns: 30% 70%;
@@ -83,4 +86,15 @@ h4 {
   background-color: var(--card-bg);
   border-radius: 10px;
   box-shadow: 0px 0px 10px var(--shadow);
+}
+
+.meet-button {
+  background-color: #4CAF50 !important;
+  border-radius: 8px;
+  transition-duration: 0.6s;
+  color: white;
+}
+
+.meet-button:hover {
+  background: var(--meetup-btn-clr-drk) !important;
 }
