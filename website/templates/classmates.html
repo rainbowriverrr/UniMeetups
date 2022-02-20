@@ -8,11 +8,14 @@
   {% for classmate in classmates %}
   <hr>
     <div class="title-card">
-      <img class="prof-pic" src="{{classmate['profile_photo']}}">
+      <img class="prof-pic" style="width:150px; height:150px;" src="{{classmate['profile_photo']}}">
       <div>
         <h3>{{classmate['full_name']}}</h3>
         <p>{{classmate['description']}}</p>
         <p>{{classmate['email']}}</p>
+        <form action="" method="post">
+        <button class="mail-button" name="mail" value="{{classmate['email']}}">Send Mail</button>
+      </form>
       </div>
       {% if classmate['mutual_acceptance'] %}
       <div>

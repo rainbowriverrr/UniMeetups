@@ -18,6 +18,7 @@ h4 {
 }
 
 .main-column {
+  
   margin-top: 20px;
   padding: 20px;
   
@@ -66,7 +67,7 @@ h4 {
   padding-bottom: 20px;
   
   display: grid;
-  grid-template-columns: 30% 50% 20%;
+  grid-template-columns: 30% 40% 30%;
 
   align-content: center;
 }
@@ -81,9 +82,7 @@ h4 {
   
 }
 
-.main-card {
-  height: auto;
-  
+.main-card {  
   margin-top: 20px;
   padding: 20px;
 

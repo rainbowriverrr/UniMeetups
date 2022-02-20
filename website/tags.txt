@@ -6,13 +6,11 @@ anime
 skiing
 basketball
 soccer
-csc
 scuba diving
 surfing
 photography
 business
 robotics
-simping
 gym
 reading
 fishing
@@ -30,3 +28,13 @@ modelling
 final exams
 midterms
 workout
+swimming
+clubbing
+manga
+books
+novels
+esports
+makeup
+skincare
+shopping
+bubble tea

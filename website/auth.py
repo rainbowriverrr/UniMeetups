@@ -189,68 +189,68 @@ def make_flash(message,category):
 
 
 # #settings page
-# @auth.route('/settings', methods=['GET', 'POST'])
-# #@login_required
-# def settings():
+@auth.route('/settings', methods=['GET', 'POST'])
+#@login_required
+def settings():
   
-#     if request.method == 'POST':
+    if request.method == 'POST':
 
-#         if request.form['submit'] == 'e':
-#             email = request.form.get('email').lower()
+        # if request.form['submit'] == 'e':
+        #     email = request.form.get('email').lower()
 
-#             if len(email) not in range(MINIMUM_EMAIL_LENGTH,
-#                                        MAX_FORM_LENGTH + 1):
-#                 make_flash('Email cannot be empty', category='error')
-#                 return redirect(url_for("auth.settings"))
+        #     if len(email) not in range(MINIMUM_EMAIL_LENGTH,
+        #                                MAX_FORM_LENGTH + 1):
+        #         make_flash('Email cannot be empty', category='error')
+        #         return redirect(url_for("auth.settings"))
 
-#             else:
+        #     else:
               
-#               user = current_user
-#               old_key = user.get_id()
-#               print(old_key)
-#               copy_data = copy.deepcopy(db["users"][old_key])
-#               del db['users'][old_key]
-#               db["users"][email] = copy_data
-#               user.id = email
-#               make_flash('Email has been updated successfully', category='yes')
-#               return redirect(url_for("auth.settings"))
+        #       user = current_user
+        #       old_key = user.get_id()
+        #       print(old_key)
+        #       copy_data = copy.deepcopy(db["users"][old_key])
+        #       del db['users'][old_key]
+        #       db["users"][email] = copy_data
+        #       user.id = email
+        #       make_flash('Email has been updated successfully', category='yes')
+        #       return redirect(url_for("auth.settings"))
               
-#         if request.form['submit'] == 'p':
-#             pw1 = request.form.get('password1')
-#             pw2 = request.form.get('password2')
+        if request.form['submit'] == 'p':
+            pw1 = request.form.get('password1')
+            pw2 = request.form.get('password2')
 
-#             if len(pw1) not in range(MINIMUM_PASSWORD_LENGTH,
-#                                      MAXIMUM_PASSWORD_LENGTH + 1):
-#                 make_flash('INVALID PASSWORD', category='error')
-#                 return redirect(url_for("auth.settings"))
+            if len(pw1) not in range(MINIMUM_PASSWORD_LENGTH,
+                                     MAXIMUM_PASSWORD_LENGTH + 1):
+                make_flash('INVALID PASSWORD', category='error')
+                return redirect(url_for("auth.settings"))
 
-#             elif pw1 != pw2:
-#                 make_flash('PASSWORDS DONT MATCH', category='error')
-#                 return redirect(url_for("auth.settings"))
+            elif pw1 != pw2:
+                make_flash('PASSWORDS DONT MATCH', category='error')
+                return redirect(url_for("auth.settings"))
 
-#             else:
-#               user = current_user
-#               cur_email = user.get_id()
-#               db["users"][cur_email]["password"] = pw1
-#               make_flash('Password has been updated successfully', category='yes')
-#               return redirect(url_for("auth.settings"))
+            else:
+              user = current_user
+              cur_email = user.get_id()
+              db["users"][cur_email]["password"] = pw1
+              make_flash('Password has been updated successfully', category='yes')
+              return redirect(url_for("auth.settings"))
 
-#         if request.form['submit'] == 'n':
-#             name = request.form.get('name')
+        if request.form['submit'] == 'n':
+            name = request.form.get('name')
 
-#             if len(name) not in range(MINIMUM_FULL_NAME_LENGTH,
-#                                       MAX_FORM_LENGTH + 1):
-#                 make_flash(
-#                     f'Name must be between {MINIMUM_FULL_NAME_LENGTH} and {MAX_FORM_LENGTH} characters',
-#                     category='error')
-#                 return redirect(url_for("auth.settings"))
+            if len(name) not in range(MINIMUM_FULL_NAME_LENGTH,
+                                      MAX_FORM_LENGTH + 1):
+                make_flash(
+                    f'Name must be between {MINIMUM_FULL_NAME_LENGTH} and {MAX_FORM_LENGTH} characters',
+                    category='error')
+                return redirect(url_for("auth.settings"))
 
-#             else:
-#               user = current_user
-#               cur_email = user.get_id()
-#               db["users"][cur_email]['name'] = name
-#               make_flash('Password has been updated successfully', category='yes')
-#               return redirect(url_for("auth.settings"))
+            else:
+              user = current_user
+              cur_email = user.get_id()
+              db["users"][cur_email]['name'] = name
+              make_flash('Password has been updated successfully', category='yes')
+              return redirect(url_for("auth.settings"))
 
-#     else:
-#         return render_template("settings.html", user=current_user)
+    else:
+        return render_template("settings.html", user=current_user)
