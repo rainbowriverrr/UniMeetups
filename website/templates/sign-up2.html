@@ -1,0 +1,14 @@
+{% extends "base.html" %}{% block title%}Sign up - 2{% endblock %}
+
+{% block content %}
+<div class="main-card">
+    <form method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <h1 for="image" align="center">Choose your profile picture</h1>
+            <input type=file name=file id="file" class="form-control-file" align="center">
+            <input type="submit" value=Upload align="center">
+        </div>
+        <br>
+        
+    </form>
+{% endblock %} 

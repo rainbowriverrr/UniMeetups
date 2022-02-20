@@ -3,6 +3,25 @@
 {% block content %}
 <div class="main-column">
   <h1 align="center">UniMeetups</h1>
-  <h4 align="center">Take care of your social life in Uni.</h4>
+  <h4 align="center">Take care of your social life in Uni</h4>
+</div>
+<div class="user-profile">
+
+  <img class="prof-pic" src="{{user_pic}}">
+  <h2>{{user_name}}</h2>
+  <p class="user-desc">{{user_desc}}</p>
+  
+</div>
+<div class="main-column">
+  <h2 align="center">Matches</h2>
+  <!-- {% for match in matches %}
+  <hr>
+  <div class="title-card">
+    <img class="prof-pic" src"{{match.pic}}">
+    <h3>{{match.name}}</h3>
+    <p>{{match.desc}}</p>
+  </div>
+  {% endfor %} -->
+  
 </div>
 {% endblock %}

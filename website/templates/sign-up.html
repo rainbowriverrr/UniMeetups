@@ -22,7 +22,7 @@
       </div>
       <br>
       <div class="form-group">
-        <lavel for="school">Choose your school</label>
+        <label for="school">Choose your school</label>
         <select name="school" id="school">
         {% for school in closest_schools %}
           <option value="{{school}}">{{school}}</option>
@@ -37,6 +37,7 @@
         <label class="btn btn-outline-primary" for="{{tag}}">{{tag}}</label>
         {% endfor %}
       </div>
+      
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
