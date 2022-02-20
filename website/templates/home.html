@@ -25,8 +25,16 @@
       <h3>{{match['full_name']}}</h3>
       <p>{{match['description']}}</p>
       <form action="" method="post">
-        <button class="meet-button" name="meetup" value="{{match['email']}}">Let's Meetup!</button>
+        <button class="meet-button" name="meetup_request" value="{{match['email']}}">Let's Meetup!</button>
       </form>
+    </div>
+    <div>
+      <h4>Top Tags</h4>
+      <ul>
+        <li>{{match['tags'][0]}}</li>
+        <li>{{match['tags'][1]}}</li>
+        <li>{{match['tags'][2]}}</li>
+      </ul>
     </div>
   </div>
   {% endfor %}

@@ -5,6 +5,8 @@
   --main-bg: #F3D9DC
   --meetup-btn-clr: #4CAF50;
   --meetup-btn-clr-drk: #2A662C;
+  --decline-btn-clr: #f44336;
+  --decline-btn-clr-drk: #9f2b23;
 }
 
 body {
@@ -64,7 +66,7 @@ h4 {
   padding-bottom: 20px;
   
   display: grid;
-  grid-template-columns: 30% 70%;
+  grid-template-columns: 30% 50% 20%;
 
   align-content: center;
 }
@@ -80,6 +82,8 @@ h4 {
 }
 
 .main-card {
+  height: auto;
+  
   margin-top: 20px;
   padding: 20px;
 
@@ -97,4 +101,27 @@ h4 {
 
 .meet-button:hover {
   background: var(--meetup-btn-clr-drk) !important;
+}
+
+.accept-button {
+  background-color: #4CAF50 !important;
+  border-radius: 8px;
+  transition-duration: 0.6s;
+  color: white;
+}
+
+.accept-button:hover {
+  background: var(--meetup-btn-clr-drk) !important;
+}
+
+.decline-button {
+  background-color: var(--decline-btn-clr) !important;
+  border-radius: 8px;
+  transition-duration: 0.6s;
+  color: white;
+  float: right;
+}
+
+.decline-button:hover {
+  background-color: var(--decline-btn-clr-drk) !important;
 }

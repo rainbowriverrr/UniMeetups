@@ -77,7 +77,12 @@ def sign_up():
         pw1 = request.form.get('password1')
         pw2 = request.form.get('password2')
         description = request.form.get("desc")
-      
+        instagram = request.form.get("instagram")
+        reddit = request.form.get("reddit")
+        github = request.form.get("github")
+        discord = request.form.get("discord")
+        linkedin = request.form.get("linkedin")
+        facebook = request.form.get("facebook")
         print(request.form)
 
       
@@ -128,10 +133,19 @@ def sign_up():
               "password":generate_password_hash(pw1,"sha256"),
               "tags":selected_tags,
               "school":user_school,
-              "description": description
+              "description": description,
+              "requests":[],
+              "classmates":[],
+              "socials":{
+                "instagram":instagram,
+                "reddit":reddit,
+                "discord":discord,
+                "facebook":facebook,
+                "linkedin":linkedin,
+                "github":github
+              }
             }
-
-              
+            
             db['users'][email] = user_data
             
             return redirect(url_for("auth.sign_up2",email=email,name=full_name))

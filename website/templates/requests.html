@@ -1,0 +1,25 @@
+{% extends "base.html" %}{% block title%}Your Requests{% endblock %}
+
+{% block content %}
+<div class="main-column">
+  <h1 align="center">Your Meetup Requests</h1>
+  <h4 align="center">Accept requests to meet up!</h4>
+
+  {% for request in meetup_requests %}
+  <hr>
+  <div class="title-card">
+    <img class="prof-pic" src="{{request['profile_photo']}}">
+    <div>
+      <h3>{{request['full_name']}}</h3>
+      <p>{{request['description']}}</p>
+      <form action="" method="post">
+        <button class="accept-button" name="accept" value="{{request['email']}}">Accept Meetup!</button>
+        <button class="decline-button" name="decline" value="{{request['email']}}">Decline Meetup!</button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+  
+</div>
+
+{% endblock %}

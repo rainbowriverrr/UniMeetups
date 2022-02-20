@@ -1,0 +1,48 @@
+{% extends "base.html" %} {% block title%}Your Classmates{% endblock %}
+
+{% block content %}
+<div class="main-column">
+  <h1 align="center">Your Classmates</h1>
+  <h4 align="center">People who have accepted your meetup requests. Connect with them for more meetups!</h4>
+
+  {% for classmate in classmates %}
+  <hr>
+    <div class="title-card">
+      <img class="prof-pic" src="{{classmate['profile_photo']}}">
+      <div>
+        <h3>{{classmate['full_name']}}</h3>
+        <p>{{classmate['description']}}</p>
+        <p>{{classmate['email']}}</p>
+      </div>
+      {% if classmate['mutual_acceptance'] %}
+      <div>
+        <h4>Social Media</h4>
+        <ul>
+          {% if classmate['socials']['instagram'] != '' %}
+          <li>Instagram: {{classmate['socials']['instagram']}}</li>
+          {% endif %}
+          {% if classmate['socials']['facebook'] != '' %}
+          <li>Facebook: {{classmate['socials']['facebook']}}</li>
+          {% endif %}
+          {% if classmate['socials']['linkedin'] != '' %}
+          <li>Linkedin: {{classmate['socials']['linkedin']}}</li>
+          {% endif %}
+          {% if classmate['socials']['discord'] != '' %}
+          <li>Discord: {{classmate['socials']['discord']}}</li>
+          {% endif %}
+          {% if classmate['socials']['github'] != '' %}
+          <li>GitHub: {{classmate['socials']['github']}}</li>
+          {% endif %}
+          {% if classmate['socials']['reddit'] != '' %}
+          <li>Reddit: {{classmate['socials']['reddit']}}</li>
+          {% endif %}
+        </ul>
+      </div>
+      {% endif %}
+
+    </div>
+    
+
+  {% endfor %}
+</div>
+{% endblock %}
