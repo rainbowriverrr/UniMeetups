@@ -1,7 +1,6 @@
 from website import create_app
 from replit import db
 
-
 app = create_app()
 
 if __name__ == "__main__":

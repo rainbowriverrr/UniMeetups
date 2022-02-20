@@ -15,7 +15,7 @@ def get_matches(user : User):
   all_users = db["users"]
   main_school = user.school
   main_tags = user.tags
-  main_classmates = all_users[user.id]["classmates"]
+  main_email = user.id
   
   same_school = lambda target : all_users[target]["school"] == main_school and target != user.id
   pool = set(list(filter(same_school,list(all_users.keys()))))
@@ -24,9 +24,10 @@ def get_matches(user : User):
   
   for person in pool:
     tags = all_users[person]["tags"]
-    email = all_users[person]["email"]
+    cur_classmates = all_users[person]["classmates"]
+    
     proportion = len([tag for tag in tags if tag in main_tags]) / len(main_tags)
-    if proportion >= 0.65 and email not in main_classmates:
+    if proportion >= 0.65 and user.id not in cur_classmates:
       copied_data = copy.deepcopy(all_users[person])
       copied_data["profile_photo"] = url_for('static',filename= copied_data["profile_photo"].replace('website/static/',''))
       potential_matches.append(copied_data)

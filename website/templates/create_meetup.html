@@ -1,0 +1,23 @@
+{% extends "base.html" %} {% block title%}Create Meetup{% endblock %}
+
+{% block content %}
+<div class="main-card">
+  <form method="POST">
+    <h3 align="center">Create Public Meetup</h3>
+    <h4 align="center">{{school}}</h4>
+
+    <div class="form_group">
+      <label for="event_name">Title</label>
+      <input type="text" class="form-control" id="event_name" name="event_name" placeholder="Meeting title..."/>
+    </div>
+
+    <div class="form_group">
+      <label for="description">Description</label>
+      <textarea class="form-control" rows="6" id="description" name="description"></textarea>
+    </div>
+      
+    <button class="submit" name="create_meetup" value="create_meetup">Create Meetup!</button>
+        
+  </form>
+</div>
+{% endblock %}

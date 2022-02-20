@@ -9,6 +9,7 @@ import os
 #defines views blueprint
 views = Blueprint('views', __name__)
 
+
 @views.route('/', methods = ['GET', 'POST'])
 @login_required
 def home():
@@ -17,7 +18,6 @@ def home():
     match_email = request.form.get("meetup_request")
     match_name = db["users"][match_email]["full_name"]
     meetup_requests = db["users"][match_email]["requests"]
-    classmates = db["users"][user.id]["classmates"]
     
     if user.id not in meetup_requests:
       db["users"][match_email]["requests"].append(user.id)
@@ -78,6 +78,64 @@ def send_mail():
     return render_template("send_mail.html",user=current_user,name=name)
 
 
+@views.route("/createmeetup",methods=["POST","GET"])
+@login_required
+def display_create_meetup():
+  if request.method == "POST":
+    user = current_user
+    school = db["users"][user.id]["school"]
+    event_name = request.form.get("event_name")
+    description = request.form.get("description")
+
+    meta_data = {
+      "description":description,
+      "people":[],
+      "num_people":0,
+      "event_organizer":user.id
+    }
+    db["public_meetups"][school][event_name] = meta_data
+    flash("The following public meetup was created successfully!","ok")
+    return redirect(url_for("views.display_meetups"))
+    
+  else:
+    user = current_user
+    school = db["users"][user.id]["school"]
+    return render_template("create_meetup.html",user=current_user,school=school)
+
+@views.route("/meetups",methods=["POST","GET"])
+@login_required
+def display_meetups():
+  if request.method == "POST":
+    user = current_user
+    school = db["users"][user.id]["school"]
+    if "create_meetup" in request.form:
+      return redirect(url_for("views.display_create_meetup"))
+    elif "end_meetup" in request.form:
+      meetup_name = request.form["end_meetup"]
+      del db["public_meetups"][school][meetup_name]
+      flash("Successfully ended the event!","yes")
+      return redirect(url_for("views.display_meetups"))
+    elif "join_meetup" in request.form:
+      meetup_name = request.form["join_meetup"]
+      meetup_data = db["public_meetups"][school][meetup_name]
+      joined = meetup_data["people"]
+      
+      if user.id not in joined:
+        joined.append(user.id)
+        meetup_data["num_people"]+=1
+        flash(f"You have joined {meetup_name} successfully!","yes")
+        return redirect(url_for("views.display_meetups"))
+      else:
+        flash(f"You already have joined {meetup_name} successfully!","error")
+        return redirect(url_for("views.display_meetups"))
+      
+  else:
+    user = current_user
+    school = db["users"][user.id]["school"]
+    meetups = db["public_meetups"][school]
+    
+    return render_template("meetups.html",user=current_user,school=school,meetups=meetups)
+
 @views.route("/classmates",methods=["GET","POST"])
 @login_required
 def display_classmates():
@@ -87,18 +145,13 @@ def display_classmates():
   else:
     user = current_user
     user_classmates = db["users"][user.id]["classmates"]
+    user_school = db["users"][user.id]["school"]
     classmates = []
 
     for classmate in user_classmates:
       data = copy.deepcopy(db["users"][classmate])
-      if user.id in data["classmates"]:
-        data["mutual_acceptance"] = True
-        data["profile_photo"] = url_for("static", filename=f"{data['profile_photo'].replace('website/static/','')}")
-        classmates.append(data)
-      else:
-        data["mutual_acceptance"] = False
-        data["profile_photo"] = url_for("static", filename=f"{data['profile_photo'].replace('website/static/','')}")
-        del data["socials"]
+      data["profile_photo"] = url_for("static", filename=f"{data['profile_photo'].replace('website/static/','')}")
+      if user_school == data["school"]:
         classmates.append(data)
     
     return render_template("classmates.html",user=current_user,classmates=classmates)
@@ -112,11 +165,17 @@ def display_requests():
     if "accept" in form_data:
       match_email = form_data.get("accept")
       db["users"][user.id]["requests"].remove(match_email)
+      
+      
       db["users"][user.id]["classmates"].append(match_email)
+      db["users"][match_email]["classmates"].append(user.id)
+      db["users"][user.id]["classmates"] = list(set(db["users"][user.id]["classmates"]))
+      db["users"][match_email]["classmates"] = list(set(db["users"][match_email]["classmates"]))
+      
       return redirect(url_for("views.display_requests"))
     elif "decline" in form_data:
       match_email = form_data.get("decline")
-      db["users"][user.id]["requests"].remove(match_email)
+      db["users"][user.id]["requests"].remove(user.id)
       return redirect(url_for("views.display_requests"))
           
   else:
@@ -130,3 +189,17 @@ def display_requests():
     
     
     return render_template("requests.html",user=current_user,meetup_requests=meetup_requests)
+
+@views.route("/about")
+def about():
+  num_users = len(db["users"])
+  num_schools = len(db["schools"])
+  tanish_pic = url_for("static",filename="team_photos/tanish.jpg")
+  tony_pic = url_for("static",filename="team_photos/tony.jpg")
+  river_pic = url_for("static",filename="team_photos/river.jpg")
+
+  return render_template("about.html",user=current_user,num_users=num_users,num_schools=num_schools,tanish_pic=tanish_pic,tony_pic=tony_pic,river_pic=river_pic)
+  
+
+  
+  

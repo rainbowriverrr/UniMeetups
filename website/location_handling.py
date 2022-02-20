@@ -8,18 +8,18 @@ GEO_KEY = "AIzaSyAA0vrb6JeeS7-hE-CvExFSdhlIEoCmOBw"
 client = gmaps.Client(key=GEO_KEY)
 
 
-# def populate_schools():
-#   '''Populate all the schools in the database'''
-#   with open("schools.txt","r") as file:
-#     schools = file.read().splitlines()
-#     university_locations = {}
-#     for school in schools:
-#       geo_res = client.find_place(school,input_type="textquery")
-#       place_id = geo_res["candidates"][0]["place_id"]
-#       uni_info = client.place(place_id)
-#       university_locations[school] = uni_info["result"]["geometry"]["location"]
+def populate_schools():
+  '''Populate all the schools in the database'''
+  with open("schools.txt","r") as file:
+    schools = file.read().splitlines()
+    university_locations = {}
+    for school in schools:
+      geo_res = client.find_place(school,input_type="textquery")
+      place_id = geo_res["candidates"][0]["place_id"]
+      uni_info = client.place(place_id)
+      university_locations[school] = uni_info["result"]["geometry"]["location"]
     
-#     db["schools"] = university_locations
+    db["schools"] = university_locations
 
 
 

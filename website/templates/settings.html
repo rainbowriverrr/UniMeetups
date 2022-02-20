@@ -3,22 +3,47 @@
 {% block content %}
 <div class="main-card">
     <form method="POST">
-            <h3 align="center">Change Email</h3>
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email..." />
-            </div>
-          <br>
-            <button type="submit" class="btn btn-primary" value="e" name="submit">Submit</button>
-    </form>
-    <form method="POST">
         <h3 align="center">Change Name</h3>
             <div class="form-group">
                 <label for="name">Name</label>
                 <input type="text" class="form-control" id="name" name="name" placeholder="Enter name"/>
               </div>
             <br>
-            <button type="submit" class="btn btn-primary" value="n" name="submit">Submit</button>
+            <button type="submit" class="btn btn-primary" value="name" name="submit">Submit</button>
+    </form>
+    <form method="POST">
+      <h3 align="center">Change Description</h3>
+      <div class="form-group">
+        <label for="desc">Profile Description:</label>
+        <textarea class="form-control" rows="5" id="desc" name="desc"></textarea>
+      </div>
+      <br>
+            <button type="submit" class="btn btn-primary" value="change_desc" name="submit">Submit</button>
+    
+    </form>
+    <form method="POST">
+        <h3 align="center">Change Interests</h3>
+            <div class="form-group">
+        <br/>
+        {% for tag in tags %}
+        <input type="checkbox" class="btn-check" id="{{tag}}" name="{{tag}}" autocomplete="off">
+        <label class="btn btn-outline-primary" for="{{tag}}">{{tag}}</label>
+        {% endfor %}
+              </div>
+            <br>
+            <button type="submit" class="btn btn-primary" value="interests" name="submit">Submit</button>
+    </form>
+    <form method="POST">
+      <h3 align="center">Change School</h3>
+      <div class="form-group">
+        <select name="school" id="school">
+        {% for school in closest_schools %}
+          <option value="{{school}}">{{school}}</option>
+        {% endfor %}
+        </select>
+      </div>
+      <br>
+            <button type="submit" class="btn btn-primary" value="school" name="submit">Submit</button>
     </form>
     <form method='POST'>
         <h3 align="center">Change Password</h3>
@@ -31,13 +56,13 @@
                 <input type="password" class="form-control" id="password2" name="password2" placeholder="Confirm password"/>
               </div>
             <br>
-            <button type="submit" class="btn btn-primary" value="p" name="submit">Submit</button>
+            <button type="submit" class="btn btn-primary" value="password" name="submit">Submit</button>
     </form>
      <form method='POST'>
         <h3 align="center">Delete account</h3>
         <h4 align="center">WARNING, THIS IS PERMANENT! DELETED ACCOUNTS CAN'T BE RECOVERED</h4>
             <br>
-            <button type="submit" class="btn btn-primary" value="p" name="submit">DELETE ACCOUNT</button>
+            <button type="submit" class="btn btn-primary" value="delete" name="submit">DELETE ACCOUNT</button>
     </form>
   
 </div>

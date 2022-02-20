@@ -124,3 +124,30 @@ h4 {
 .decline-button:hover {
   background-color: var(--decline-btn-clr-drk) !important;
 }
+
+.meetup-block {
+  margin-top: 20px;
+  padding: 10px;
+}
+
+.profile-block {
+  margin-top: 20px;
+
+  display: grid;
+  grid-template-columns: 20% 80%;
+  
+}
+
+.profile-block div {
+  padding: 10px;
+}
+
+.profile-photo {
+  width: 180px;
+  height: 180px;
+
+  align-self: center;
+
+  object-fit: cover;
+  border-radius: 50%;
+}

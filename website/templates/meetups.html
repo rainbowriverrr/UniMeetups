@@ -1,0 +1,32 @@
+{% extends "base.html" %} {% block title%}Public Meetups{% endblock %}
+
+{% block content %}
+<div class="main-column">
+
+  <h1 style="align:center">Public Meetups</h1>
+  <h4 style="align:center">{{school}}</h4>
+  <hr>
+  <form action="" method="post">
+    <button class="meet-button" name="create_meetup" value="">Create Meetup</button>
+  </form>
+
+  {% for meetup in meetups %}
+    <hr>
+    <div class="meetup-block">
+      <!--<img class="meetup-img" src="{{meetup['img']}}"></img>-->
+      <h3>{{meetup}}</h3>
+      <p>{{meetups[meetup]['description']}}</p>
+      <p>Attendees: {{meetups[meetup]['num_people']}}</p>
+      <form action="" method="post">
+        <button class="submit" name="join_meetup" value="{{meetup}}">Join Meetup!</button>
+      </form>
+      {% if user.id == meetups[meetup]['event_organizer'] %}
+      <form action="" method="post">
+        <button class="submit" name="end_meetup" value="{{meetup}}">End Meetup          </button>
+      </form>
+      {% endif %}
+    </div>
+  {% endfor %}
+  
+</div>
+{% endblock %}

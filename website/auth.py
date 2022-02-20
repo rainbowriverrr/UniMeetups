@@ -7,7 +7,7 @@ from website.misc import get_tags
 from website.user import User
 import copy
 import os
-from website.misc import UPLOAD_PATH
+from website.misc import UPLOAD_PATH,get_tags
 
 # define form constants for sign up
 MINIMUM_EMAIL_LENGTH = 5
@@ -190,32 +190,11 @@ def make_flash(message,category):
 
 # #settings page
 @auth.route('/settings', methods=['GET', 'POST'])
-#@login_required
+@login_required
 def settings():
-  
+    tags = get_tags()
     if request.method == 'POST':
-
-        # if request.form['submit'] == 'e':
-        #     email = request.form.get('email').lower()
-
-        #     if len(email) not in range(MINIMUM_EMAIL_LENGTH,
-        #                                MAX_FORM_LENGTH + 1):
-        #         make_flash('Email cannot be empty', category='error')
-        #         return redirect(url_for("auth.settings"))
-
-        #     else:
-              
-        #       user = current_user
-        #       old_key = user.get_id()
-        #       print(old_key)
-        #       copy_data = copy.deepcopy(db["users"][old_key])
-        #       del db['users'][old_key]
-        #       db["users"][email] = copy_data
-        #       user.id = email
-        #       make_flash('Email has been updated successfully', category='yes')
-        #       return redirect(url_for("auth.settings"))
-              
-        if request.form['submit'] == 'p':
+        if request.form['submit'] == 'password':
             pw1 = request.form.get('password1')
             pw2 = request.form.get('password2')
 
@@ -231,11 +210,13 @@ def settings():
             else:
               user = current_user
               cur_email = user.get_id()
-              db["users"][cur_email]["password"] = pw1
+              db["users"][cur_email]["password"] = generate_password_hash(pw1, "sha256")
               make_flash('Password has been updated successfully', category='yes')
               return redirect(url_for("auth.settings"))
 
-        if request.form['submit'] == 'n':
+              
+        
+        if request.form['submit'] == 'name':
             name = request.form.get('name')
 
             if len(name) not in range(MINIMUM_FULL_NAME_LENGTH,
@@ -247,10 +228,50 @@ def settings():
 
             else:
               user = current_user
-              cur_email = user.get_id()
-              db["users"][cur_email]['name'] = name
+              cur_email = user.id
+              db["users"][cur_email]['full_name'] = name
               make_flash('Password has been updated successfully', category='yes')
               return redirect(url_for("auth.settings"))
 
+        if request.form["submit"] == "change_desc":
+          user = current_user
+          new_desc = request.form.get("desc")
+          db["users"][user.id]["description"] = new_desc
+          make_flash("Profile description has now been updated","ok")
+          return redirect(url_for("auth.settings"))
+      
+        if request.form["submit"] == "delete":
+          user = current_user
+          user_key = user.id
+          user.authenticated = False
+          logout_user()
+          make_flash('Successfully deleted account', category='yes')
+
+          #delete account
+          del db['users'][user_key]
+          return redirect(url_for('auth.login'))
+
+        if request.form["submit"]== "interests":
+          user = current_user
+          user_key = user.id
+          form_data = request.form
+          form_keys = list(form_data.keys())
+          selected_tags = [key for key in form_keys if key in tags]
+          db['users'][user.id]['tags'] = selected_tags
+          make_flash('Successfully changed interests', category='yes')
+          return redirect(url_for("auth.settings"))
+
+        if request.form["submit"]== "school":
+          user = current_user
+          user_key = user.id
+          form_data = request.form
+          user_school = form_data["school"]
+          db['users'][user.id]['school'] = user_school
+          make_flash('Successfully changed school', category='yes')
+          return redirect(url_for("auth.settings"))
+          
     else:
-        return render_template("settings.html", user=current_user)
+        user_ip = request.environ.get("HTTP_X_FORWARDED_FOR")
+        closest_schools = get_closest_schools(user_ip)
+        return render_template("settings.html", user=current_user, closest_schools=closest_schools,
+                               tags=tags)

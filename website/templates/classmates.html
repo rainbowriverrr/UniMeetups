@@ -17,7 +17,6 @@
         <button class="mail-button" name="mail" value="{{classmate['email']}}">Send Mail</button>
       </form>
       </div>
-      {% if classmate['mutual_acceptance'] %}
       <div>
         <h4>Social Media</h4>
         <ul>
@@ -26,7 +25,7 @@
           {% endif %}
           {% if classmate['socials']['facebook'] != '' %}
           <li>Facebook: {{classmate['socials']['facebook']}}</li>
-          {% endif %}
+          {% endif %} 
           {% if classmate['socials']['linkedin'] != '' %}
           <li>Linkedin: {{classmate['socials']['linkedin']}}</li>
           {% endif %}
@@ -41,11 +40,8 @@
           {% endif %}
         </ul>
       </div>
-      {% endif %}
 
     </div>
-    
-
   {% endfor %}
 </div>
 {% endblock %}
