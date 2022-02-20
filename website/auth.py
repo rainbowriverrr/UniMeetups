@@ -17,6 +17,7 @@ MINIMUM_PASSWORD_LENGTH = 10
 MAXIMUM_PASSWORD_LENGTH = 40
 MINIMUM_USERNAME_LENGTH = 5
 MAXIMUM_USERNAME_LENGTH = 15
+MAXIMUM_DESCRIPTION_LENGTH = 1200
 
 #defines auth blueprint view
 auth = Blueprint('auth', __name__)
@@ -75,6 +76,8 @@ def sign_up():
         full_name = request.form.get('name')
         pw1 = request.form.get('password1')
         pw2 = request.form.get('password2')
+        description = request.form.get("desc")
+      
         print(request.form)
 
       
@@ -83,7 +86,6 @@ def sign_up():
                                        MAX_FORM_LENGTH + 1):
             make_flash(f'Name must be between {MINIMUM_FULL_NAME_LENGTH} and {MAX_FORM_LENGTH} characters', category='error')
             return redirect(url_for("auth.sign_up"))
-                                         
         #No. 2: Email field must not be empty
         elif len(email) not in range(MINIMUM_EMAIL_LENGTH,
                                      MAX_FORM_LENGTH + 1):
@@ -97,12 +99,18 @@ def sign_up():
                 f'Password must be between {MINIMUM_PASSWORD_LENGTH} and {MAXIMUM_PASSWORD_LENGTH} characters',
                 category='error')
             return redirect(url_for("auth.sign_up"))
-
+                                     
         #No. 4: Passwords must match
         elif pw1 != pw2:
           make_flash('Passwords do not match', category='error')
           return redirect(url_for("auth.sign_up"))
 
+        #No. 5: Check description                             
+        elif len(description) > MAXIMUM_DESCRIPTION_LENGTH:
+          make_flash(
+                f'User Description must be between 0 and {MAXIMUM_DESCRIPTION_LENGTH} characters',
+                category='error')
+          return redirect(url_for("auth.sign_up"))
 
         elif email in db["users"]:
           make_flash("An account associated with this email already exists!", category="error")
@@ -119,7 +127,8 @@ def sign_up():
               "full_name":full_name,
               "password":generate_password_hash(pw1,"sha256"),
               "tags":selected_tags,
-              "school":user_school
+              "school":user_school,
+              "description": description
             }
 
               
@@ -128,6 +137,8 @@ def sign_up():
             return redirect(url_for("auth.sign_up2",email=email,name=full_name))
   
     else:
+        
+        
         user_ip = request.environ.get("HTTP_X_FORWARDED_FOR")
         closest_schools = get_closest_schools(user_ip)
         return render_template("sign-up.html",
@@ -139,7 +150,7 @@ def sign_up():
 @auth.route('/sign_up2',methods=["GET","POST"])
 def sign_up2():
   if request.method == "POST":
-    if 
+    
     file = request.files["file"]
     f_name = file.filename
     email = request.args.get("email")
@@ -151,6 +162,8 @@ def sign_up2():
     return redirect(url_for("auth.login"))
   
   else:
+    user = current_user
+      
     make_flash("Please select a profile picture!", "caution")
     return render_template("sign-up2.html",user=current_user)
 
