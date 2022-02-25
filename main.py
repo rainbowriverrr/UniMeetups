@@ -1,5 +1,8 @@
 from website import create_app
-from replit import db
+import os
+from website.mongo_helpers import find_meetups
+
+
 
 app = create_app()
 

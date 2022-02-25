@@ -14,13 +14,13 @@
     <hr>
     <div class="meetup-block">
       <!--<img class="meetup-img" src="{{meetup['img']}}"></img>-->
-      <h3>{{meetup}}</h3>
-      <p>{{meetups[meetup]['description']}}</p>
-      <p>Attendees: {{meetups[meetup]['num_people']}}</p>
+      <h3>{{meetup['name']}}</h3>
+      <p>{{meetup['description']}}</p>
+      <p>Attendees: {{meetup['num_people']}}</p>
       <form action="" method="post">
         <button class="submit" name="join_meetup" value="{{meetup}}">Join Meetup!</button>
       </form>
-      {% if user.id == meetups[meetup]['event_organizer'] %}
+      {% if user.id == meetup['event_organizer'] %}
       <form action="" method="post">
         <button class="submit" name="end_meetup" value="{{meetup}}">End Meetup          </button>
       </form>

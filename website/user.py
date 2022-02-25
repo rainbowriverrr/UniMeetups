@@ -1,9 +1,9 @@
 from flask_login import UserMixin
-from replit import db
+from website.mongo_helpers import find_user
 
 class User(UserMixin):
   def __init__(self,id):
-    self.json_data = db["users"][id]
+    self.json_data = find_user(id)
     self.id = self.json_data["email"]
     self.school = self.json_data["school"]
     self.tags = self.json_data["tags"]
@@ -24,5 +24,3 @@ class User(UserMixin):
   def is_anonymous(self):
       return False
 
-  def get_pic(self):
-    return db["users"][self.id]["profile_photo"]

@@ -1,19 +1,19 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for,session
 from werkzeug.security import generate_password_hash, check_password_hash  #hash to store encrypted password
 from flask_login import login_user, login_required, logout_user, current_user
-from replit import db
 from website.location_handling import get_closest_schools
 from website.misc import get_tags
 from website.user import User
 import copy
 import os
 from website.misc import UPLOAD_PATH,get_tags
+from website.mongo_helpers import *
 
 # define form constants for sign up
 MINIMUM_EMAIL_LENGTH = 5
 MINIMUM_FULL_NAME_LENGTH = 5
 MAX_FORM_LENGTH = 95
-MINIMUM_PASSWORD_LENGTH = 10
+MINIMUM_PASSWORD_LENGTH = 8
 MAXIMUM_PASSWORD_LENGTH = 40
 MINIMUM_USERNAME_LENGTH = 5
 MAXIMUM_USERNAME_LENGTH = 15
@@ -34,8 +34,9 @@ def login():
         password = request.form.get('password1')
 
         #checks for any users in the database that match the email entered
-        if email in db['users']:
-            user_json = db['users'][email]
+        check = find_user(email)
+        if check != None: #find
+            user_json = check
             user = User(email)
             if check_password_hash(user_json['password'], password):
                 
@@ -77,13 +78,14 @@ def sign_up():
         pw1 = request.form.get('password1')
         pw2 = request.form.get('password2')
         description = request.form.get("desc")
-        instagram = request.form.get("instagram")
+        instagram = request.form.get("insta")
         reddit = request.form.get("reddit")
         github = request.form.get("github")
         discord = request.form.get("discord")
         linkedin = request.form.get("linkedin")
         facebook = request.form.get("facebook")
-        print(request.form)
+
+        check = find_user(email)
 
       
         #No. 1: Name field must not be empty
@@ -116,8 +118,8 @@ def sign_up():
                 f'User Description must be between 0 and {MAXIMUM_DESCRIPTION_LENGTH} characters',
                 category='error')
           return redirect(url_for("auth.sign_up"))
-
-        elif email in db["users"]:
+    
+        elif check != None: #find
           make_flash("An account associated with this email already exists!", category="error")
           return redirect(url_for("auth.sign_up"))
         else:
@@ -134,6 +136,7 @@ def sign_up():
               "tags":selected_tags,
               "school":user_school,
               "description": description,
+              "profile_photo": "",
               "requests":[],
               "classmates":[],
               "socials":{
@@ -146,7 +149,7 @@ def sign_up():
               }
             }
             
-            db['users'][email] = user_data
+            add_user(email,user_data)
             
             return redirect(url_for("auth.sign_up2",email=email,name=full_name))
   
@@ -171,7 +174,8 @@ def sign_up2():
     full_name = request.args.get("name")
     save_name = ".".join([full_name,f_name.split(".")[1]])
     file.save(os.path.join(UPLOAD_PATH,save_name))
-    db["users"][email]["profile_photo"] = f"{UPLOAD_PATH}/{save_name}"
+    save_path = f"{UPLOAD_PATH}/{save_name}"
+    update_user(email, "profile_photo", save_path)
     make_flash("Account created succesfully!", "yes")
     return redirect(url_for("auth.login"))
   
@@ -210,7 +214,7 @@ def settings():
             else:
               user = current_user
               cur_email = user.get_id()
-              db["users"][cur_email]["password"] = generate_password_hash(pw1, "sha256")
+              update_user(cur_email, "password", generate_password_hash(pw1, "sha256")) 
               make_flash('Password has been updated successfully', category='yes')
               return redirect(url_for("auth.settings"))
 
@@ -229,14 +233,15 @@ def settings():
             else:
               user = current_user
               cur_email = user.id
-              db["users"][cur_email]['full_name'] = name
-              make_flash('Password has been updated successfully', category='yes')
+              update_user(cur_email, "full_name", name) 
+              make_flash('Full name has been updated successfully', category='yes')
               return redirect(url_for("auth.settings"))
 
         if request.form["submit"] == "change_desc":
           user = current_user
+          cur_email = user.id
           new_desc = request.form.get("desc")
-          db["users"][user.id]["description"] = new_desc
+          update_user(cur_email, "description", new_desc) 
           make_flash("Profile description has now been updated","ok")
           return redirect(url_for("auth.settings"))
       
@@ -248,7 +253,7 @@ def settings():
           make_flash('Successfully deleted account', category='yes')
 
           #delete account
-          del db['users'][user_key]
+          delete_user(user_key)
           return redirect(url_for('auth.login'))
 
         if request.form["submit"]== "interests":
@@ -257,7 +262,7 @@ def settings():
           form_data = request.form
           form_keys = list(form_data.keys())
           selected_tags = [key for key in form_keys if key in tags]
-          db['users'][user.id]['tags'] = selected_tags
+          update_user(user_key, "interests", selected_tags)
           make_flash('Successfully changed interests', category='yes')
           return redirect(url_for("auth.settings"))
 
@@ -266,7 +271,7 @@ def settings():
           user_key = user.id
           form_data = request.form
           user_school = form_data["school"]
-          db['users'][user.id]['school'] = user_school
+          update_user(user_key, "school", user_school)
           make_flash('Successfully changed school', category='yes')
           return redirect(url_for("auth.settings"))
           
